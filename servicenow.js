@@ -11,13 +11,14 @@ const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${insta
 
 //Authenticate ServiceNow instances
 ServiceNow.prototype.Authenticate=function(){
+    var self = this;
     return new Promise(function(resolve, reject) {
         const options={
-            url:`https://${getInstance(this.instance)}/api/now/v2/table/sys_user?user_name=${this.userid}`,
+            url:`https://${getInstance(self.instance)}/api/now/v2/table/sys_user?user_name=${self.userid}`,
             method:'get',
             auth:{
-                username:`${this.userid}`,
-                password:`${this.password}`
+                username:`${self.userid}`,
+                password:`${self.password}`
             }
         };
         axios(options).then((val)=>{
