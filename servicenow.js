@@ -1,4 +1,5 @@
 let axios= require('axios');
+const Promise = require("bluebird");
 
 function ServiceNow(instance,userid,password){
     this.instance=instance;
@@ -10,23 +11,25 @@ const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${insta
 
 //Authenticate ServiceNow instances
 ServiceNow.prototype.Authenticate=function(){
-    const options={
-        url:`https://${getInstance(this.instance)}/api/now/v2/table/sys_user?user_name=${this.userid}`,
-        method:'get',
-        auth:{
-            username:`${this.userid}`,
-            password:`${this.password}`
-        }
-    };
-    axios(options).then((val)=>{
-        var res={
-            raw:val,
-            status:val.status
-        }
-        console.log('Authenticated');
-    },(rej)=>{
-        console.log(rej);
-    });
+    return new Promise(function(resolve, reject) {
+        const options={
+            url:`https://${getInstance(this.instance)}/api/now/v2/table/sys_user?user_name=${this.userid}`,
+            method:'get',
+            auth:{
+                username:`${this.userid}`,
+                password:`${this.password}`
+            }
+        };
+        axios(options).then((val)=>{
+            var res={
+                raw:val,
+                status:val.status
+            }
+            resolve(val);
+        },(rej)=>{
+            reject(rej);
+        });
+    })
 }
 
 // Add custom network options
