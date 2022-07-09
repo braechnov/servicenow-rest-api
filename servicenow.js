@@ -88,7 +88,7 @@ ServiceNow.prototype.getTableData=function(fields,filters,type,callback){
     return new Promise(function(resolve, reject) {
         let sysparm_fields='sysparm_fields=';
         let sysparm_query='sysparm_query=';
-        let url=`https://${getInstance(self.instance)}/api/now/v2/table/${type}?sysparm_display_value=true`;
+        let url=`https://${getInstance(self.instance)}/api/now/v2/table/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
         if(fields.length>0){
             fields.forEach(field=>{
                 sysparm_fields+=field+','
