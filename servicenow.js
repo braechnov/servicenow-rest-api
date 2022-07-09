@@ -84,61 +84,42 @@ ServiceNow.prototype.getSampleData=function(type,callback){
 
 //GET-Service now Table data
 ServiceNow.prototype.getTableData=function(fields,filters,type,callback){
-    let sysparm_fields='sysparm_fields=';
-    let sysparm_query='sysparm_query=';
-    let url=`https://${getInstance(this.instance)}/api/now/v2/table/${type}?sysparm_display_value=true`;
-    if(fields.length>0){
-        fields.forEach(field=>{
-            sysparm_fields+=field+','
+    var self = this;
+    return new Promise(function(resolve, reject) {
+        let sysparm_fields='sysparm_fields=';
+        let sysparm_query='sysparm_query=';
+        let url=`https://${getInstance(self.instance)}/api/now/v2/table/${type}?sysparm_display_value=true`;
+        if(fields.length>0){
+            fields.forEach(field=>{
+                sysparm_fields+=field+','
+            });
+            sysparm_fields=sysparm_fields.replace(/,\s*$/,"");
+            url=`${url}&${sysparm_fields}`;
+        }
+        if(filters.length>0){
+            filters.forEach(filter=>{
+                sysparm_query+=filter+'^'
+            });
+            sysparm_query=sysparm_query.replace(/\^\s*$/,"");
+            url=`${url}&${sysparm_query}`;
+        }
+    
+        const options={
+            url:url,
+            method:'get',
+            auth:{
+                username:`${self.userid}`,
+                password:`${self.password}`
+            }
+        };
+        console.log(url);
+        axios(options).then((val)=>{
+            resolve(val.data.result);
+        }).catch((err)=>{
+            reject(err);
         });
-        sysparm_fields=sysparm_fields.replace(/,\s*$/,"");
-        url=`${url}&${sysparm_fields}`;
-    }
-    if(filters.length>0){
-        filters.forEach(filter=>{
-            sysparm_query+=filter+'^'
-        });
-        sysparm_query=sysparm_query.replace(/\^\s*$/,"");
-        url=`${url}&${sysparm_query}`;
-    }
-
-    const options={
-        url:url,
-        method:'get',
-        auth:{
-            username:`${this.userid}`,
-            password:`${this.password}`
-        }
-    };
-    console.log(url);
-    axios(options).then((val)=>{
-        if(callback == undefined){
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.getTableData(fields,filters,'incident',(res)=>console.log(res))`);
-            console.log();
-        }else{
-            callback(val.data.result);
-        }
-
-    }).catch((err)=>{
-        if(callback == undefined){
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.getTableData(fields,filters,'incident',(res)=>console.log(res))`);
-            console.log();
-            console.log('(2) ==> Bad Request...');
-            console.log(err);
-        }else{
-            callback(err);
-        }
-    });
+    })
+    
 }
 
 //POST- Create new record in ServiceNow Table
