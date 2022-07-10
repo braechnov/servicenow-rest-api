@@ -83,7 +83,7 @@ ServiceNow.prototype.getSampleData=function(type,callback){
 }
 
 //GET-Service now Table data
-ServiceNow.prototype.getTableData=function(fields,filters,type,callback){
+ServiceNow.prototype.getTableData = function(fields,filters,type,callback){
     var self = this;
     return new Promise(function(resolve, reject) {
         let sysparm_fields='sysparm_fields=';
@@ -112,7 +112,6 @@ ServiceNow.prototype.getTableData=function(fields,filters,type,callback){
                 password:`${self.password}`
             }
         };
-        console.log(url);
         axios(options).then((val)=>{
             resolve(val.data.result);
         }).catch((err)=>{
@@ -123,7 +122,7 @@ ServiceNow.prototype.getTableData=function(fields,filters,type,callback){
 }
 
 //POST- Create new record in ServiceNow Table
-ServiceNow.prototype.createNewTask=function(data,type,callback){
+ServiceNow.prototype.createNewTask = function(data,type,callback){
     const options={
         url:`https://${getInstance(this.instance)}/api/now/table/${type}?sysparm_input_display_value=true&sysparm_display_value=true`,
         method:'post',
