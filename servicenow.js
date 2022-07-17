@@ -11,15 +11,15 @@ const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${insta
 //Authenticate ServiceNow instances
 ServiceNow.prototype.Authenticate = function () {
     const options = {
-        url: `https://${getInstance(self.instance)}/api/now/v2/table/sys_user?user_name=${self.userid}`,
+        url: `https://${getInstance(this.instance)}/api/now/v2/table/sys_user?user_name=${this.userid}`,
         method: 'get',
         auth: {
-            username: `${self.userid}`,
-            password: `${self.password}`
+            username: `${this.userid}`,
+            password: `${this.password}`
         }
     }
 
-    return axios(options);
+    return axios(options)
 }
 
 // Add custom network options
@@ -75,7 +75,7 @@ ServiceNow.prototype.getSampleData = function (type, callback) {
 ServiceNow.prototype.getTableData = function (fields, filters, type) {
     let sysparm_fields = 'sysparm_fields=';
     let sysparm_query = 'sysparm_query=';
-    let url = `https://${getInstance(self.instance)}/api/now/v2/table/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
+    let url = `https://${getInstance(this.instance)}/api/now/v2/table/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
     if (fields.length > 0) {
         fields.forEach(field => {
             sysparm_fields += field + ','
