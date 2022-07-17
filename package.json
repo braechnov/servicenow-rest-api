@@ -1,6 +1,6 @@
 {
     "name": "servicenow-rest-api",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "Wrapper library for ServiceNow REST API",
     "main": "servicenow.js",
     "scripts": {
