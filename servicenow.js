@@ -118,7 +118,7 @@ ServiceNow.prototype.getSysId = function (type, number) {
     };
     return axios(options)
         .then(function(result) {
-            return result;
+            return result.data.result[0].sys_id;
         })
 }
 
