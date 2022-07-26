@@ -62,6 +62,46 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
         })
 }
 
+//GET-Service now Table data
+ServiceNow.prototype.getRecord = function (fields, filters, type, limit) {
+    // let sysparm_fields = 'sysparm_fields=';
+    // let sysparm_query = 'sysparm_query=';
+    // let sysparm_limit = 'sysparm_limit=';
+    // let url = `/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
+    // if (fields.length > 0) {
+    //     fields.forEach(field => {
+    //          += field + ','
+    //     });
+    //     sysparm_fields = sysparm_fields.replace(/,\s*$/, "");
+    //     url = `${url}&${sysparm_fields}`;
+    // }
+    // if (filters.length > 0) {
+    //     filters.forEach(filter => {
+    //         sysparm_query += filter + '^'
+    //     });
+    //     sysparm_query = sysparm_query.replace(/\^\s*$/, "");
+    //     url = `${url}&${sysparm_query}`;
+    // }
+
+    // if (limit > 0) {
+    //     sysparm_limit += limit;
+    //     url = `${url}&${sysparm_limit}`;
+    // }
+
+    return this.agent.get(url)
+        .query('sysparm_fields=', fields.join(','))
+        .query('sysparm_query=', filters.join(','))
+        .query('sysparm_limit=', limit)
+        .query('sysparm_display_value', 'false')
+        .query('sysparm_input_display_value', 'true')
+        .then(function (response) {
+            if (response.status === 200) {
+                return response._body.result
+            }
+        })
+}
+
+
 //POST- Create new record in ServiceNow Table
 ServiceNow.prototype.createNewRecord = function (data, type, callback) {
     const url = `/${type}?sysparm_input_display_value=true&sysparm_display_value=true`
