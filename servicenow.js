@@ -3,15 +3,7 @@ const axios = rateLimit(require('axios').create(), { maxRequests: 2, perMillisec
 
 function ServiceNow(instance, userid, password) {
     if (!this.instance) {
-
-        this.instance = new Promise(function (resolve, reject) {
-            try {
-                resolve(axios.create(generateConfig(instance, userid, password)))
-            }
-            catch (error) {
-                reject(error)
-            }
-        })
+        this.instance = axios.create(generateConfig(instance, userid, password))
     }
 }
 
