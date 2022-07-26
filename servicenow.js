@@ -2,25 +2,27 @@ const rateLimit = require('axios-rate-limit')
 const axios = rateLimit(require('axios').create(), { maxRequests: 2, perMilliseconds: 1000, maxRPS: 2 });
 
 function ServiceNow(instance, userid, password) {
-    this.instance = instance;
-    this.userid = userid;
-    this.password = password;
+    this.instance = axios.create(generateConfig)
 }
 
 const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`;
 
-//Authenticate ServiceNow instances
-ServiceNow.prototype.Authenticate = function () {
-    const options = {
-        url: `https://${getInstance(this.instance)}/api/now/v2/table/sys_user?user_name=${this.userid}`,
-        method: 'get',
-        auth: {
-            username: `${this.userid}`,
-            password: `${this.password}`
-        }
+const generateConfig = function(instance, username, password) {
+    if(!table) {
+        throw new Error('must supply a table name')
     }
 
-    return axios(options)
+    if (!instance) {
+        throw new Error('must supply and instance name')
+    }
+
+    return {
+        baseUrl: `https://${instance}/api/now/v2/table/`,
+        auth: {
+            username: username,
+            password: password
+        }
+    }
 }
 
 // Add custom network options
@@ -36,7 +38,7 @@ ServiceNow.prototype.setNetworkOptions = function (options) {
 //GET - Sample data to check the fields and filters
 ServiceNow.prototype.getSampleData = function (type, callback) {
     const options = {
-        url: `https://${getInstance(this.instance)}/api/now/v2/table/${type}?sysparm_limit=1`,
+        url: `https://${this.instance}/api/now/v2/table/${type}?sysparm_limit=1`,
         method: 'get',
         auth: {
             username: `${this.userid}`,
@@ -51,7 +53,7 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
     let sysparm_fields = 'sysparm_fields=';
     let sysparm_query = 'sysparm_query=';
     let sysparm_limit = 'sysparm_limit=';
-    let url = `https://${getInstance(this.instance)}/api/now/v2/table/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
+    let url = `${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
     if (fields.length > 0) {
         fields.forEach(field => {
             sysparm_fields += field + ','
@@ -72,21 +74,8 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
         url = `${url}&${sysparm_limit}`;
     }
 
-
-    const options = {
-        url: url,
-        method: 'get',
-        auth: {
-            username: this.userid,
-            password: this.password
-        }
-    }
-
-    return axios(options)
+    return this.instance.get(url)
 }
-
-
-
 
 //POST- Create new record in ServiceNow Table
 ServiceNow.prototype.createNewTask = function (data, type, callback) {
