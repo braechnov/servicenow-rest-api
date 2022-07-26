@@ -79,7 +79,7 @@ ServiceNow.prototype.getSysId = function (type, number) {
     return this.agent.get(url)
         .then(function (response) {
             if (response.status === 200) {
-                return response._body.result[0]
+                return response._body.result[0].sys_id
             }
         })
 }
@@ -87,14 +87,17 @@ ServiceNow.prototype.getSysId = function (type, number) {
 //POST - Update task record in ServiceNow
 ServiceNow.prototype.UpdateRecord = function (type, number, data) {
     const self = this;
-    this.getSysId(type, number)
+    return this.getSysId(type, number)
         .then(function (sys_id) {
-            const url = `/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`
+            const url = `/${type}/${sys_id}`
             return self.agent.put(url)
+                .query('sysparm_input_display_value', 'true')
+                .query('sysparm_display_value', 'true')
+                .withCredentials()
                 .send(data)
                 .then(function (response) {
                     if (response.status === 200) {
-                        return response._body.result[0]
+                        return response._body.result
                     }
                 })
         });
