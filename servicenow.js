@@ -20,12 +20,8 @@ ServiceNow.prototype.getInstance = function (options) {
 const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`;
 
 const generateConfig = function (instance, username, password) {
-    if (!table) {
-        throw new Error('must supply a table name')
-    }
-
     if (!instance) {
-        throw new Error('must supply and instance name')
+        throw new Error('must supply an instance name')
     }
 
     return {
