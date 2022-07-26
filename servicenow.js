@@ -7,6 +7,7 @@ const maxRPS = 2
 function ServiceNow(host, username, password) {
     if (!this.instance) {
         this.instance = rateLimit(require('axios').create(generateConfig(host, username, password)), { maxRequests: maxRequests, perMilliseconds: perMilliseconds, maxRPS: maxRPS })
+    }
 }
 
 ServiceNow.prototype.getInstance = function (options) {
