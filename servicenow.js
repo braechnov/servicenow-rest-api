@@ -1,9 +1,6 @@
 const rateLimit = require('axios-rate-limit')
 const axios = rateLimit(require('axios').create(), { maxRequests: 2, perMilliseconds: 1000, maxRPS: 2 });
 
-
-
-
 function ServiceNow(instance, userid, password) {
     this.instance = instance;
     this.userid = userid;
@@ -76,9 +73,10 @@ ServiceNow.prototype.getSampleData = function (type, callback) {
 }
 
 //GET-Service now Table data
-ServiceNow.prototype.getTableData = function (fields, filters, type) {
+ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
     let sysparm_fields = 'sysparm_fields=';
     let sysparm_query = 'sysparm_query=';
+    let sysparm_limit = 'sysparm_limit=';
     let url = `https://${getInstance(this.instance)}/api/now/v2/table/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
     if (fields.length > 0) {
         fields.forEach(field => {
@@ -94,6 +92,12 @@ ServiceNow.prototype.getTableData = function (fields, filters, type) {
         sysparm_query = sysparm_query.replace(/\^\s*$/, "");
         url = `${url}&${sysparm_query}`;
     }
+
+    if (limit > 0) {
+        sysparm_limit += limit;
+        url = `${url}&${sysparm_limit}`;
+    }
+
 
     const options = {
         url: url,
