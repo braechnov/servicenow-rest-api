@@ -90,7 +90,7 @@ ServiceNow.prototype.UpdateRecord = function (type, number, data) {
     this.getSysId(type, number)
         .then(function (sys_id) {
             const url = `/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`
-            return self.agent.post(url)
+            return self.agent.put(url)
                 .send(data)
                 .then(function (response) {
                     if (response.status === 200) {
