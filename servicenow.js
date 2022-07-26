@@ -67,7 +67,7 @@ ServiceNow.prototype.getRecord = function (fields, filters, type, limit) {
     // let sysparm_fields = 'sysparm_fields=';
     // let sysparm_query = 'sysparm_query=';
     // let sysparm_limit = 'sysparm_limit=';
-    // let url = `/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
+    let url = `/${type}`;
     // if (fields.length > 0) {
     //     fields.forEach(field => {
     //          += field + ','
@@ -92,8 +92,8 @@ ServiceNow.prototype.getRecord = function (fields, filters, type, limit) {
         .query('sysparm_fields=', fields.join(','))
         .query('sysparm_query=', filters.join(','))
         .query('sysparm_limit=', limit)
-        .query('sysparm_display_value', 'false')
-        .query('sysparm_input_display_value', 'true')
+        .query('sysparm_display_value=', 'false')
+        .query('sysparm_input_display_value=', 'true')
         .then(function (response) {
             if (response.status === 200) {
                 return response._body.result
