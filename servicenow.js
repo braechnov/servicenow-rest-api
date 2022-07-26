@@ -107,7 +107,7 @@ ServiceNow.prototype.createNewTask = function (data, type, callback) {
 }
 
 //GET- Sysid for table records for reference
-ServiceNow.prototype.getSysId = function (type, number, callback) {
+ServiceNow.prototype.getSysId = function (type, number) {
     const options = {
         url: `https://${getInstance(this.instance)}/api/now/v2/table/${type}?sysparm_query=number=${number}&sysparm_fields=sys_id`,
         method: 'get',
@@ -124,7 +124,8 @@ ServiceNow.prototype.getSysId = function (type, number, callback) {
 
 //POST - Update task record in ServiceNow
 ServiceNow.prototype.UpdateTask = function (type, number, data) {
-    return this.getSysId(type, number, (sys_id) => {
+    return this.getSysId(type, number)
+        .then(function(sys_id) {
         const options = {
             url: `https://${getInstance(this.instance)}/api/now/table/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`,
             method: 'put',
