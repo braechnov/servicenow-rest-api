@@ -15,7 +15,6 @@ function ServiceNow(host, username, password) {
         this.agent = superagent
             .use(prefix(`https://${getInstance(host)}/api/now/v2/table/`))
             .use(throttle.plugin())
-            .auth(username, password)
             .use(Basic(username, password))
     }
 }
