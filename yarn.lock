@@ -146,6 +146,11 @@ inherits@^2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
+js-base64@^2.6.2:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
+  integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
+
 lru-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
@@ -245,6 +250,13 @@ string_decoder@^1.1.1:
   integrity sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==
   dependencies:
     safe-buffer "~5.2.0"
+
+superagent-authorization@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/superagent-authorization/-/superagent-authorization-1.0.1.tgz#d5359cef578fa2c3b366083b86876a83bec5529e"
+  integrity sha512-SUoObgfEw/y7MsIou36yHcuHzw8IPDg1jBv5Ynw8x/FfH8rt27Bj9N0W7XxfBufYR5OSNNO0Rjqg0VVZWjVEQA==
+  dependencies:
+    js-base64 "^2.6.2"
 
 superagent-prefix@^0.0.2:
   version "0.0.2"

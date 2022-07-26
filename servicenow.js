@@ -1,7 +1,8 @@
 const rateLimit = require('axios-rate-limit')
-const superagent = require('superagent-use')(require('superagent'));
+const superagent = require('superagent-use')(require('superagent'))
 const Throttle = require('superagent-throttle')
-const prefix = require('superagent-prefix');
+const { Basic, Bearer } = require('superagent-authorization')
+const prefix = require('superagent-prefix')
 
 let throttle = new Throttle({
     active: true,     // set false to pause queue
@@ -15,6 +16,7 @@ function ServiceNow(host, username, password) {
             .use(prefix(`https://${getInstance(host)}/api/now/v2/table/`))
             .use(throttle.plugin())
             .auth(username, password)
+            .use(Basic(username, password))
     }
 }
 
