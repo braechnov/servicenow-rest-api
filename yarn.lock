@@ -76,6 +76,11 @@ dezalgo@1.0.3:
     asap "^2.0.0"
     wrappy "1"
 
+extend@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
+  integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
+
 fast-safe-stringify@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz#c406a83b6e70d9e35ce3b30a81141df30aeba884"
@@ -148,7 +153,7 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-methods@^1.1.2:
+methods@^1.1.2, methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==
@@ -250,6 +255,14 @@ superagent-throttle@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/superagent-throttle/-/superagent-throttle-1.0.1.tgz#5eb3a9d01370b2c3206d7a90ea8f0448369403d3"
   integrity sha512-m5Ngf0S5QoA84zgwVqVnVA34u9uvo8uM+QEF9B7eNI5FDaSoSoUwQsx7V1GmLXgYLkolhIiucFDVJXF9z49hgQ==
+
+superagent-use@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/superagent-use/-/superagent-use-0.1.0.tgz#d28dbbbf573ba980329b4645897608bc99501cff"
+  integrity sha512-s44A4GELzh48F8Ej6WMU8FLnhYWwSM80pINKUn1TOGlCO38hlxUmiHKVXVU2eirJlel4uFkY9LbeiQ82D4x9Qw==
+  dependencies:
+    extend "^3.0.0"
+    methods "~1.1.2"
 
 superagent@^8.0.0:
   version "8.0.0"
