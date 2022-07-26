@@ -1,10 +1,12 @@
 const rateLimit = require('axios-rate-limit')
-const axios = rateLimit(require('axios').create(), { maxRequests: 2, perMilliseconds: 1000, maxRPS: 2 });
 
-function ServiceNow(instance, userid, password) {
+const maxRequest = 2
+const perMilliseconds = 1000
+const maxRPS = 2
+
+function ServiceNow(host, username, password) {
     if (!this.instance) {
-        this.instance = axios.create(generateConfig(instance, userid, password))
-    }
+        this.instance = rateLimit(require('axios').create(generateConfig(host, username, password)), { maxRequests: maxRequests, perMilliseconds: perMilliseconds, maxRPS: maxRPS })
 }
 
 ServiceNow.prototype.getInstance = function (options) {
@@ -19,9 +21,9 @@ ServiceNow.prototype.getInstance = function (options) {
 
 const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`;
 
-const generateConfig = function (instance, username, password) {
-    if (!instance) {
-        throw new Error('must supply an instance name')
+const generateConfig = function (host, username, password) {
+    if (!host) {
+        throw new Error('must supply a host')
     }
 
     return {
