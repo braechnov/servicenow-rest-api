@@ -2,13 +2,33 @@ const rateLimit = require('axios-rate-limit')
 const axios = rateLimit(require('axios').create(), { maxRequests: 2, perMilliseconds: 1000, maxRPS: 2 });
 
 function ServiceNow(instance, userid, password) {
-    this.instance = axios.create(generateConfig(instance, userid, password))
+    if (!this.instance) {
+
+        this.instance = new Promise(function (resolve, reject) {
+            try {
+                resolve(axios.create(generateConfig(instance, userid, password)))
+            }
+            catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
+
+ServiceNow.prototype.getInstance = function (options) {
+    if (Object.keys(options).length > 0) {
+        return axios.create(options);
+    } else {
+        throw new Error("Invalid Options")
+    }
+}
+
+
 
 const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`;
 
-const generateConfig = function(instance, username, password) {
-    if(!table) {
+const generateConfig = function (instance, username, password) {
+    if (!table) {
         throw new Error('must supply a table name')
     }
 
@@ -17,7 +37,7 @@ const generateConfig = function(instance, username, password) {
     }
 
     return {
-        baseUrl: `https://${instance}/api/now/v2/table/`,
+        baseUrl: `https://${getInstance(instance)}/api/now/v2/table/`,
         auth: {
             username: username,
             password: password
@@ -106,7 +126,7 @@ ServiceNow.prototype.getSysId = function (type, number) {
         }
     };
     return axios(options)
-        .then(function(result) {
+        .then(function (result) {
             return result.data.result[0].sys_id;
         })
 }
@@ -115,23 +135,23 @@ ServiceNow.prototype.getSysId = function (type, number) {
 ServiceNow.prototype.UpdateTask = function (type, number, data) {
     const self = this;
     this.getSysId(type, number)
-        .then(function(sys_id) {
-        const options = {
-            url: `https://${getInstance(self.instance)}/api/now/table/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`,
-            method: 'put',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Basic '+btoa(username+':'+password)
-            },
-            data: data,
-            // auth: {
-            //     username: `${self.userid}`,
-            //     password: `${self.password}`
-            // }
-        }
-        return axios(options)
-    });
+        .then(function (sys_id) {
+            const options = {
+                url: `https://${getInstance(self.instance)}/api/now/table/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`,
+                method: 'put',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa(username + ':' + password)
+                },
+                data: data,
+                // auth: {
+                //     username: `${self.userid}`,
+                //     password: `${self.password}`
+                // }
+            }
+            return axios(options)
+        });
 }
 
 //DELETE - Delete record from Servicenow table
