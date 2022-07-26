@@ -1,51 +1,33 @@
 const rateLimit = require('axios-rate-limit')
+const request     = require('superagent')
+const Throttle    = require('superagent-throttle')
+const prefix = require('superagent-prefix');
+
+let throttle = new Throttle({
+    active: true,     // set false to pause queue
+    rate: 5,          // how many requests can be sent every `ratePer`
+    ratePer: 10000,   // number of ms in which `rate` requests may be sent
+    concurrent: 2     // how many requests can be sent concurrently
+  })
 
 const maxRequests = 2
 const perMilliseconds = 1000
 const maxRPS = 2
 
 function ServiceNow(host, username, password) {
-    if (!this.instance) {
-        this.instance = rateLimit(require('axios').create(generateConfig(host, username, password)), { maxRequests: maxRequests, perMilliseconds: perMilliseconds, maxRPS: maxRPS })
+    if (!this.agent) {
+        this.agent = request.agent()
+            .use(prefix(`https://${getInstance(host)}/api/now/v2/table/`))
+            .use(throttle.plugin())
+            .auth(username, password)
     }
 }
 
-const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`;
-
-const generateConfig = function (host, username, password) {
-    if (!host) {
-        throw new Error('must supply a host')
-    }
-
-    return {
-        baseUrl: `https://${getInstance(host)}/api/now/v2/table/`,
-        auth: {
-            username: username,
-            password: password
-        }
-    }
-}
-
-// Add custom network options
-ServiceNow.prototype.setNetworkOptions = function (options) {
-    if (Object.keys(options).length > 0) {
-        return axios.create(options);
-    } else {
-        throw new Error("Invalid Options")
-    }
-}
-
+const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`
 
 //GET - Sample data to check the fields and filters
 ServiceNow.prototype.getSampleData = function (type, callback) {
-    const options = {
-        url: `https://${this.instance}/api/now/v2/table/${type}?sysparm_limit=1`,
-        method: 'get',
-        auth: {
-            username: `${this.userid}`,
-            password: `${this.password}`
-        }
-    };
+    const url = `${type}?sysparm_limit=1`
     return axios(options)
 }
 
@@ -75,7 +57,7 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
         url = `${url}&${sysparm_limit}`;
     }
 
-    return this.instance.get(url)
+    return this.agent.get(url)
 }
 
 //POST- Create new record in ServiceNow Table
