@@ -132,13 +132,14 @@ ServiceNow.prototype.UpdateTask = function (type, number, data) {
             method: 'put',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic '+btoa(username+':'+password)
             },
             data: data,
-            auth: {
-                username: `${self.userid}`,
-                password: `${self.password}`
-            }
+            // auth: {
+            //     username: `${self.userid}`,
+            //     password: `${self.password}`
+            // }
         }
         return axios(options)
     });
