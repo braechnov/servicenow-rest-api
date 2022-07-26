@@ -1,6 +1,6 @@
 const rateLimit = require('axios-rate-limit')
 const superagent = require('superagent-use')(require('superagent'));
-const Throttle    = require('superagent-throttle')
+const Throttle = require('superagent-throttle')
 const prefix = require('superagent-prefix');
 
 let throttle = new Throttle({
@@ -8,15 +8,10 @@ let throttle = new Throttle({
     rate: 5,          // how many requests can be sent every `ratePer`
     ratePer: 10000,   // number of ms in which `rate` requests may be sent
     concurrent: 2     // how many requests can be sent concurrently
-  })
-
-const maxRequests = 2
-const perMilliseconds = 1000
-const maxRPS = 2
-
+})
 function ServiceNow(host, username, password) {
     if (!this.agent) {
-        this.agent = superagent.agent()
+        this.agent = superagent
             .use(prefix(`https://${getInstance(host)}/api/now/v2/table/`))
             .use(throttle.plugin())
             .auth(username, password)
