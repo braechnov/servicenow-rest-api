@@ -1,6 +1,6 @@
 const rateLimit = require('axios-rate-limit')
 
-const maxRequest = 2
+const maxRequests = 2
 const perMilliseconds = 1000
 const maxRPS = 2
 
@@ -10,16 +10,6 @@ function ServiceNow(host, username, password) {
     }
 }
 
-ServiceNow.prototype.getInstance = function (options) {
-    if (Object.keys(options).length > 0) {
-        return axios.create(options);
-    } else {
-        throw new Error("Invalid Options")
-    }
-}
-
-
-
 const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`;
 
 const generateConfig = function (host, username, password) {
@@ -28,7 +18,7 @@ const generateConfig = function (host, username, password) {
     }
 
     return {
-        baseUrl: `https://${getInstance(instance)}/api/now/v2/table/`,
+        baseUrl: `https://${getInstance(host)}/api/now/v2/table/`,
         auth: {
             username: username,
             password: password
