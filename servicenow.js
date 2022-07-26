@@ -63,35 +63,23 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
 
 //POST- Create new record in ServiceNow Table
 ServiceNow.prototype.createNewTask = function (data, type, callback) {
-    const options = {
-        url: `https://${getInstance(this.instance)}/api/now/table/${type}?sysparm_input_display_value=true&sysparm_display_value=true`,
-        method: 'post',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: data,
-        auth: {
-            username: `${this.userid}`,
-            password: `${this.password}`
-        }
-    }
-    return axios(options)
+    const url = `/${type}?sysparm_input_display_value=true&sysparm_display_value=true`,
+    return this.agent.post(url)
+        .then(function (response) {
+            if (response.status === 200) {
+                return response._body.result
+            }
+        })
 }
 
 //GET- Sysid for table records for reference
 ServiceNow.prototype.getSysId = function (type, number) {
-    const options = {
-        url: `https://${getInstance(this.instance)}/api/now/v2/table/${type}?sysparm_query=number=${number}&sysparm_fields=sys_id`,
-        method: 'get',
-        auth: {
-            username: `${this.userid}`,
-            password: `${this.password}`
-        }
-    };
-    return axios(options)
-        .then(function (result) {
-            return result.data.result[0].sys_id;
+    const url = `/${type}?sysparm_query=number=${number}&sysparm_fields=sys_id`
+    return this.agent.get(url)
+        .then(function (response) {
+            if (response.status === 200) {
+                return response._body.result[0]
+            }
         })
 }
 
@@ -100,21 +88,13 @@ ServiceNow.prototype.UpdateTask = function (type, number, data) {
     const self = this;
     this.getSysId(type, number)
         .then(function (sys_id) {
-            const options = {
-                url: `https://${getInstance(self.instance)}/api/now/table/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`,
-                method: 'put',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa(username + ':' + password)
-                },
-                data: data,
-                // auth: {
-                //     username: `${self.userid}`,
-                //     password: `${self.password}`
-                // }
-            }
-            return axios(options)
+            const url = `/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`
+            return this.agent.post(url)
+                .then(function (response) {
+                    if (response.status === 200) {
+                        return response._body.result[0]
+                    }
+                })
         });
 }
 
