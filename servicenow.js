@@ -54,6 +54,11 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
     }
 
     return this.agent.get(url)
+        .then(function (response) {
+            if (response.status === 200) {
+                return response._body.result
+            }
+        })
 }
 
 //POST- Create new record in ServiceNow Table
