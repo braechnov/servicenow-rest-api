@@ -138,8 +138,7 @@ ServiceNow.prototype.UpdateRecord = function (type, sys_id, data) {
                 if (response.status === 200) {
                     return response.body.result
                 }
-            })
-        
+            })       
 }
 
 //DELETE - Delete record from Servicenow table
