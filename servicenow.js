@@ -124,10 +124,11 @@ ServiceNow.prototype.getSysId = function (type, number) {
 
 //POST - Update task record in ServiceNow
 ServiceNow.prototype.UpdateTask = function (type, number, data) {
+    const self = this;
     return this.getSysId(type, number)
         .then(function(sys_id) {
         const options = {
-            url: `https://${getInstance(this.instance)}/api/now/table/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`,
+            url: `https://${getInstance(self.instance)}/api/now/table/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`,
             method: 'put',
             headers: {
                 'Accept': 'application/json',
@@ -135,8 +136,8 @@ ServiceNow.prototype.UpdateTask = function (type, number, data) {
             },
             data: data,
             auth: {
-                username: `${this.userid}`,
-                password: `${this.password}`
+                username: `${self.userid}`,
+                password: `${self.password}`
             }
         }
         return axios(options)
