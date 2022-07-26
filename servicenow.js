@@ -10,6 +10,7 @@ let throttle = new Throttle({
     ratePer: 10000,   // number of ms in which `rate` requests may be sent
     concurrent: 2     // how many requests can be sent concurrently
 })
+
 function ServiceNow(host, username, password) {
     if (!this.agent) {
         this.agent = superagent
@@ -63,7 +64,7 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
 
 //POST- Create new record in ServiceNow Table
 ServiceNow.prototype.createNewTask = function (data, type, callback) {
-    const url = `/${type}?sysparm_input_display_value=true&sysparm_display_value=true`,
+    const url = `/${type}?sysparm_input_display_value=true&sysparm_display_value=true`
     return this.agent.post(url)
         .then(function (response) {
             if (response.status === 200) {
@@ -90,6 +91,7 @@ ServiceNow.prototype.UpdateTask = function (type, number, data) {
         .then(function (sys_id) {
             const url = `/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`
             return this.agent.post(url)
+                .send(data)
                 .then(function (response) {
                     if (response.status === 200) {
                         return response._body.result[0]
