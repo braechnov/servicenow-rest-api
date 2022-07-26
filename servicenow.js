@@ -89,12 +89,13 @@ ServiceNow.prototype.getRecord = function (fields, filters, type, limit) {
     // }
 
     return this.agent
+        .get(url)   
         .query('sysparm_fields=', fields.join(','))
         .query('sysparm_query=', filters.join(','))
         .query('sysparm_limit=', limit)
         .query('sysparm_display_value=', 'false')
         .query('sysparm_input_display_value=', 'true')
-        .get(url)
+        
         .then(function (response) {
             if (response.status === 200) {
                 return response.body.result[0]
