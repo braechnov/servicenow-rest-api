@@ -63,7 +63,7 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
 }
 
 //POST- Create new record in ServiceNow Table
-ServiceNow.prototype.createNewTask = function (data, type, callback) {
+ServiceNow.prototype.createNewRecord = function (data, type, callback) {
     const url = `/${type}?sysparm_input_display_value=true&sysparm_display_value=true`
     return this.agent.post(url)
         .then(function (response) {
@@ -85,7 +85,7 @@ ServiceNow.prototype.getSysId = function (type, number) {
 }
 
 //POST - Update task record in ServiceNow
-ServiceNow.prototype.UpdateTask = function (type, number, data) {
+ServiceNow.prototype.UpdateRecord = function (type, number, data) {
     const self = this;
     this.getSysId(type, number)
         .then(function (sys_id) {
@@ -101,7 +101,7 @@ ServiceNow.prototype.UpdateTask = function (type, number, data) {
 }
 
 //DELETE - Delete record from Servicenow table
-ServiceNow.prototype.DeleteTask = function (type, number, callback) {
+ServiceNow.prototype.DeleteRecord = function (type, number, callback) {
     this.getSysId(type, number, (sys_id) => {
         const options = {
             url: `https://${getInstance(this.instance)}/api/now/table/${type}/${sys_id}`,
