@@ -43,33 +43,7 @@ ServiceNow.prototype.getSampleData = function (type, callback) {
             password: `${this.password}`
         }
     };
-    axios(options).then((val) => {
-        if (callback == undefined) {
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.getSampleData('change_request',(res)=>console.log(res))`);
-            console.log();
-        } else {
-            callback(val.data.result);
-        }
-    }).catch((err) => {
-        if (callback == undefined) {
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.getSampleData('change_request',(res)=>console.log(res))`);
-            console.log();
-            console.log('(2) ==> Bad Request...');
-            console.log(err);
-        } else {
-            callback(err);
-        }
-    });
+    return axios(options)
 }
 
 //GET-Service now Table data
@@ -129,36 +103,7 @@ ServiceNow.prototype.createNewTask = function (data, type, callback) {
             password: `${this.password}`
         }
     }
-
-    axios(options).then((val) => {
-        if (callback == undefined) {
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.createNewTask(data,'incident',(res)=>console.log(res))`);
-            console.log();
-        } else {
-            callback(val.data.result);
-        }
-    }).catch((err) => {
-        if (callback == undefined) {
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.createNewTask(data,'incident',(res)=>console.log(res))`);
-            console.log();
-            console.log('(2) ==> Bad Request...');
-            console.log(err);
-        } else {
-            callback(err);
-        }
-
-    });
-
+    return axios(options)
 }
 
 //GET- Sysid for table records for reference
@@ -171,37 +116,11 @@ ServiceNow.prototype.getSysId = function (type, number, callback) {
             password: `${this.password}`
         }
     };
-    axios(options).then((val) => {
-        if (callback == undefined) {
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.getSysId('incident','INC0000016',(res)=>console.log(res))`);
-            console.log();
-        } else {
-            callback(val.data.result[0].sys_id);
-        }
-    }).catch((err) => {
-        if (callback == undefined) {
-            console.log();
-            console.log('Fix below errors');
-            console.log();
-            console.log('(1) ==> Cannot find Callback function...');
-            console.log('*********** Sample Request **********');
-            console.log(`ServiceNow.getSysId('incident','INC0000016',(res)=>console.log(res))`);
-            console.log();
-            console.log('(2) ==> Bad Request...');
-            console.log(err);
-        } else {
-            callback(err);
-        }
-    });
+    return axios(options)
 }
 
 //POST - Update task record in ServiceNow
-ServiceNow.prototype.UpdateTask = function (type, number, data, callback) {
+ServiceNow.prototype.UpdateTask = function (type, number, data) {
     this.getSysId(type, number, (sys_id) => {
         const options = {
             url: `https://${getInstance(this.instance)}/api/now/table/${type}/${sys_id}?sysparm_input_display_value=true&sysparm_display_value=true`,
@@ -216,33 +135,7 @@ ServiceNow.prototype.UpdateTask = function (type, number, data, callback) {
                 password: `${this.password}`
             }
         }
-        axios(options).then((val) => {
-            if (callback == undefined) {
-                console.log();
-                console.log('Fix below errors');
-                console.log();
-                console.log('(1) ==> Cannot find Callback function...');
-                console.log('*********** Sample Request **********');
-                console.log(`ServiceNow.UpdateTask('incident','INC0010006',data,(res)=>console.log(res))`);
-                console.log();
-            } else {
-                callback(val.data.result);
-            }
-        }).catch((err) => {
-            if (callback == undefined) {
-                console.log();
-                console.log('Fix below errors');
-                console.log();
-                console.log('(1) ==> Cannot find Callback function...');
-                console.log('*********** Sample Request **********');
-                console.log(`ServiceNow.UpdateTask('incident','INC0010006',data,(res)=>console.log(res))`);
-                console.log();
-                console.log('(2) ==> Bad Request...');
-                console.log(err);
-            } else {
-                callback(err);
-            }
-        });
+        return axios(options)
     });
 }
 
