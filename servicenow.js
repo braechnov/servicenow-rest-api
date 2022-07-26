@@ -2,7 +2,7 @@ const rateLimit = require('axios-rate-limit')
 const axios = rateLimit(require('axios').create(), { maxRequests: 2, perMilliseconds: 1000, maxRPS: 2 });
 
 function ServiceNow(instance, userid, password) {
-    this.instance = axios.create(generateConfig)
+    this.instance = axios.create(generateConfig(instance, userid, password))
 }
 
 const getInstance = instance => instance.indexOf(".") >= 0 ? instance : `${instance}.service-now.com`;
