@@ -88,15 +88,16 @@ ServiceNow.prototype.getRecord = function (fields, filters, type, limit) {
     //     url = `${url}&${sysparm_limit}`;
     // }
 
-    return this.agent.get(url)
+    return this.agent
         .query('sysparm_fields=', fields.join(','))
         .query('sysparm_query=', filters.join(','))
         .query('sysparm_limit=', limit)
         .query('sysparm_display_value=', 'false')
         .query('sysparm_input_display_value=', 'true')
+        .get(url)
         .then(function (response) {
             if (response.status === 200) {
-                return response._body.result
+                return response.body.result[0]
             }
         })
 }
@@ -125,22 +126,20 @@ ServiceNow.prototype.getSysId = function (type, number) {
 }
 
 //POST - Update task record in ServiceNow
-ServiceNow.prototype.UpdateRecord = function (type, number, data) {
-    const self = this;
-    return this.getSysId(type, number)
-        .then(function (sys_id) {
-            const url = `/${type}/${sys_id}`
-            return self.agent.put(url)
-                .query('sysparm_input_display_value', 'true')
-                .query('sysparm_display_value', 'true')
-                .withCredentials()
-                .send(data)
-                .then(function (response) {
-                    if (response.status === 200) {
-                        return response._body.result
-                    }
-                })
-        });
+ServiceNow.prototype.UpdateRecord = function (type, sys_id, data) {
+        const url = `/${type}/${sys_id}`
+        return self.agent.put(url)
+        .query({sysparm_query: `sys_id=${sys_id}`})
+            .query({sysparm_input_display_value: true})
+            .query({sysparm_display_value: true})
+            .withCredentials()
+            .send(data)
+            .then(function (response) {
+                if (response.status === 200) {
+                    return response.body.result
+                }
+            })
+        
 }
 
 //DELETE - Delete record from Servicenow table
