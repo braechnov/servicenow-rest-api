@@ -241,6 +241,11 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
+superagent-prefix@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/superagent-prefix/-/superagent-prefix-0.0.2.tgz#b15bbb1353f889b00d25af10b4f11b350d203b06"
+  integrity sha512-LssjLYPklgE/ZlaowG+DZjSvXkiwyT47U3D1tvgDlAeG7w7ew5MowVXwepIt+yoVql2xQmgR/sJr2sivkRyN7g==
+
 superagent-throttle@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/superagent-throttle/-/superagent-throttle-1.0.1.tgz#5eb3a9d01370b2c3206d7a90ea8f0448369403d3"
