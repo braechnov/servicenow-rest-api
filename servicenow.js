@@ -36,7 +36,7 @@ ServiceNow.prototype.getTableData = function (fields, filters, type, limit) {
     let sysparm_fields = 'sysparm_fields=';
     let sysparm_query = 'sysparm_query=';
     let sysparm_limit = 'sysparm_limit=';
-    let url = `${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
+    let url = `/${type}?sysparm_display_value=false&sysparm_input_display_value=true`;
     if (fields.length > 0) {
         fields.forEach(field => {
             sysparm_fields += field + ','
