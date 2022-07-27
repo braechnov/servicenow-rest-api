@@ -129,8 +129,8 @@ ServiceNow.prototype.getSysId = function (type, number) {
 //POST - Update task record in ServiceNow
 ServiceNow.prototype.UpdateRecord = function (type, sys_id, data) {
         const url = `/${type}/${sys_id}`
-        return self.agent.put(url)
-        .query({sysparm_query: `sys_id=${sys_id}`})
+        return this.agent.put(url)
+            .query({sysparm_query: `sys_id=${sys_id}`})
             .query({sysparm_input_display_value: true})
             .query({sysparm_display_value: true})
             .withCredentials()
